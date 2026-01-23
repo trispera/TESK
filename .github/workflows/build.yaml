@@ -3,6 +3,7 @@ name: Helm Chart Testing
 on:
   pull_request: 
     branches: [master]
+  worflow_dispatch:
 
 jobs:
   helm:
