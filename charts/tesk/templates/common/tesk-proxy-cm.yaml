@@ -1,0 +1,10 @@
+{{ if .Values.tesk.proxy.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: proxy-config
+data:
+  http_proxy: {{ .Values.tesk.proxy.http_proxy }}
+  https_proxy: {{ .Values.tesk.proxy.https_proxy }}
+  no_proxy: {{ .Values.tesk.proxy.no_proxy }}
+{{ end }}

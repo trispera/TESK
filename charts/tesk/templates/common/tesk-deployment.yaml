@@ -23,7 +23,16 @@ spec:
           requests:
              cpu: {{ .Values.tesk.requestsCpu }}
              memory: {{ .Values.tesk.requestsMemory }}
+        {{ if .Values.tesk.proxy.enabled }}
+        envFrom:
+        - configMapRef:
+            name: proxy-config
+        {{ end }}
         env:
+        {{ if .Values.tesk.javaOpt.enabled }}
+        - name: JAVA_OPTS
+          value: {{ .Values.tesk.javaOpt.opts }}
+        {{ end }}
         - name: TESK_API_TASKMASTER_IMAGE_NAME
           value: {{ .Values.tesk.taskmaster_image_name }}
         - name: TESK_API_TASKMASTER_IMAGE_VERSION
