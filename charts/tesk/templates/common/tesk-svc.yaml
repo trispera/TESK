@@ -1,3 +1,4 @@
+{{- if not .Values.oauth2.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,7 +8,56 @@ metadata:
 spec:
   ports:
   - port: {{ .Values.tesk.port }}
-    {{ if eq .Values.service.type "NodePort" }}nodePort: {{ .Values.service.node_port }}   # valid only if {{ .Values.service.type }} == NodePort{{ end }}
+    {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.service.node_port }}
+    {{- end }}   
   selector:
     app: tesk-api
-  type: {{ if .Values.service.type }}{{ .Values.service.type }}{{ else }}'ClusterIP'{{ end }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
+{{- end }}
+
+{{- if .Values.oauth2.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: tesk-api
+  labels:
+    app: tesk-api
+spec:
+  ports:
+  - port: {{ .Values.tesk.port }}
+    {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.service.node_port }}
+    {{- end }}  
+  selector:
+    app: tesk-api
+  type: {{ .Values.service.type | default "ClusterIP" }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy
+spec:
+  ports:
+  - name: http
+    port: 4180
+    protocol: TCP
+    targetPort: 4180
+  selector:
+    app: tesk-api
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy-token
+spec:
+  ports:
+  - name: http
+    port: 4181
+    protocol: TCP
+    targetPort: 4181
+  selector:
+    app: tesk-api
+{{- end }}

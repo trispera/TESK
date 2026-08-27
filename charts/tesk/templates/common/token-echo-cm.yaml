@@ -1,0 +1,17 @@
+{{- if .Values.oauth2.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: token-echo-nginx-conf
+data:
+  default.conf: |
+    server {
+        listen 8081;
+
+        location /token {
+            add_header Cache-Control "no-store" always;
+            default_type application/json;
+            return 200 '{"access_token": "$http_x_forwarded_access_token"}';
+        }
+    }
+{{- end }}

@@ -1,4 +1,4 @@
-{{ if and (.Capabilities.APIVersions.Has "route.openshift.io/v1") (eq .Values.ingress.rules false) }}
+{{- if and (.Capabilities.APIVersions.Has "route.openshift.io/v1") (not .Values.ingress.rules) (not .Values.oauth2.enabled) }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -13,10 +13,37 @@ spec:
     name: tesk-api
     weight: 100
   wildcardPolicy: None
-status:
-  ingress:
-    - conditions:
-      host: {{ .Values.host_name }}
-      routerName: router
-      wildcardPolicy: None
-{{ end }}
+{{- end }}
+{{- if and (.Capabilities.APIVersions.Has "route.openshift.io/v1") (not .Values.ingress.rules) (.Values.oauth2.enabled) }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tesk-svc
+spec:
+  host: {{ .Values.host_name }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: oauth2-proxy
+    weight: 100
+  wildcardPolicy: None
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tesk-token
+spec:
+  host: {{ .Values.host_name }}
+  path: /token
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: oauth2-proxy-token
+    weight: 100
+  wildcardPolicy: None
+{{- end }}

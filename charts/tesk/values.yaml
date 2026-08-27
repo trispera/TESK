@@ -63,12 +63,27 @@ transfer:
 auth:
     # the following variables are specific to each deployment
     # mode: auth/noauth
-    mode: auth
+    # if mode=noauth, you can deploy an OAuth2 proxy in front of TESK API
+    # see after
+    mode: noauth
     # EBI/CSC
     env_subgroup: CSC
     env_basegroup: ECP_CLN
     client_id: ""
     client_secret: ""
+
+oauth2:
+    enabled: true
+    image: quay.io/oauth2-proxy/oauth2-proxy:latest
+    provider: oidc
+    oidcIssuerUrl: https://login.aai.lifescience-ri.eu/oidc/
+    clientId: ""
+    clientSecret: ""
+    redirectUrl: "" # https://youapp.domain.com/oauth2/callback
+    emailDomain: "*"
+    scope: "openid profile email"
+    upstream: "http://tesk-api:8080/"
+    cookieSecret: ""
 
 service:
     # the following variables are specific to each deployment
@@ -77,7 +92,7 @@ service:
     # - LoadBalancer for cloud provider (gcloud) or empty otherwise
     # type: NodePort
     # node_port: 31567
-    type: ""
+    type: ClusterIP
     node_port: ""
 
 ftp:
