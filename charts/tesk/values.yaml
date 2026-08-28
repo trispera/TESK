@@ -81,7 +81,7 @@ oauth2:
     clientSecret: ""
     redirectUrl: "" # https://youapp.domain.com/oauth2/callback
     emailDomain: "*"
-    scope: "openid profile email"
+    scope: "openid profile email eduperson_entitlement"
     upstream: "http://tesk-api:8080/"
     cookieSecret: ""
 
