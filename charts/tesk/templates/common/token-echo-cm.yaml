@@ -9,9 +9,19 @@ data:
         listen 8081;
 
         location /token {
-            add_header Cache-Control "no-store" always;
-            default_type application/json;
-            return 200 '{"access_token": "$http_x_forwarded_access_token"}';
+            add_header Content-Type "text/html" always;
+            return 200 '<!DOCTYPE html>
+    <html>
+    <head><title>LS AAI Token</title></head>
+    <body style="font-family: sans-serif; max-width: 640px; margin: 40px auto;">
+      <h2>Your LS AAI access token</h2>
+      <textarea id="tok" readonly style="width:100%; height:120px;">$http_x_forwarded_access_token</textarea>
+      <br><br>
+      <button onclick="navigator.clipboard.writeText(document.getElementById(\'tok\').value)">Copy</button>
+      <p style="color:#666; font-size:0.9em;">This token is short-lived. Reload this page to get a fresh one once it expires.</p>
+      <p style="color:#666; font-size:0.9em;"> Client ID: {{ tpl .Values.auth.client_id . }}</p>
+    </body>
+    </html>';
         }
     }
 {{- end }}
