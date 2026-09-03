@@ -52,35 +52,6 @@ $ helm upgrade -n tesk --install tesk-release . -f secrets.yaml -f values.yaml
 *Note*: If you're running Helm 3, you might need to also use the `--create-namespace` option, as non-existent namespaces
 do not get created by default (see [this](https://github.com/helm/helm/issues/6794)). 
 
-##  Description of values
+##  Secure Environment
 
-See [`values.yaml`](values.yaml) for default values.
-
-| Key | Type | Description |
-| --- | --- | --- |
-| host_name | string | FQDN to expose the application |
-| storageClass | string | Name of a user preferred storage class (default is empty) |
-| storage | string | Can be either 'openstack' or 's3' |
-| tesk.image | string | container image (including the version) to be used to run TESK API |
-| tesk.port | integer | |
-| tesk.taskmaster_image_version | string | the version of the image to be used to run TESK Taskmaster Job |
-| tesk.taskmaster_filer_image_version | string | the version of the image to be used to run TESK Filer Job |
-| tesk.executor_retries| int | The number of retries on error - actual task compute (executor)|
-| tesk.filer_retries| int | The number of retries on error while handling I/O (filer)|
-| tesk.debug | boolean | Activates the debugging mode |
-| tesk.securityContext.enabled | boolean | Enable securityContext |
-| transfer.wes_base_path | string | |
-| transfer.tes_base_path | string | |
-| transfer.pvc_name | string | |
-| auth.mode | string | Can be 'noauth' to disable authentication, or 'auth' to enable it |
-| auth.env_subgroup | string | Can be 'EBI' or 'CSC' |
-| service.type | string | Can be 'NodePort' or 'ClusterIp' or 'LoadBalancer' |
-| service.node_port | integer | Only used if service.type is 'NodePort', specifies the port |
-| ftp.classic_ftp_secret | String | The name of a secret to store FTP credentials as keys. If empty, the old-style FTP secret is not created |
-| ftp.netrc_secret | String | The name of a secret to store FTP credentials as a netrc file. If empty, the netrc FTP secret is not created |
-| ftp.hostip | string | IP of the endpoint of the ftp as seen by containers in K8s (only needed, if in need of a DNS entry for locally installed FTP server) |
-| ingress.rules| boolean | Apply or not the ingress rule |
-| ingress.ingressClassName | string | Name of the Ingress Class |
-| ingress.path | string |  |
-| ingress.tls_secret_name | string |  If no TLS secret name configured, TLS will be switched off. A template can be found at [deployment/tls_secret_name.yml-TEMPLATE](deployment/tls_secret_name.yml-TEMPLATE). If you are using cert-manager the secret will be created automatically.|
-| ingress.annotations | string | Annotations for the ingress rules |
+See Secure environment [documentation](SECURE-ENVIRONMENT.md)
