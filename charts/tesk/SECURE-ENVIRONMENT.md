@@ -1,6 +1,6 @@
 # Secure environment deployment
 
-New values have been added to deploy into a secure environment (no internet access such as cPouta)
+New values have been added to deploy into a secure environment (no internet access such as ePouta)
 
 - `.Values.tesk.proxy`: Deploy a `ConfigMap`
 - `.Values.tesk.javaOpt`: Add `JAVA_OPTS` environment variable for tesk-api
